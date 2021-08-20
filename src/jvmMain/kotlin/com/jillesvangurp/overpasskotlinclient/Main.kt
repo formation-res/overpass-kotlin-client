@@ -25,5 +25,5 @@ val rels="""
 
 suspend fun main() {
     val client = OverpassClient()
-    println(client.callAndParse(toiletsBboxKoelnCenter))
+    println(client.getGeoJson(toiletsBboxKoelnCenter))
 }

@@ -1,10 +1,12 @@
 # Overpass Kotlin Client
 
-Simple client for overpass that uses ktor-client and kotlinx.serialization for parsing json responses.
+Simple client for overpass that uses `ktor-client` and `kotlinx.serialization` for parsing JSON responses.
 
-## Multi platform
+For now, simply edit the main file (jvm) or call the client from your own code.
 
-It's a multiplatform project so you can build it for IOS, Android, JVM, Browser, etc. Currently I only have jvm and js targets. But adding more should not be hard.
+## Multi-Platform
+
+It's a multi-platform project, so you can build it for IOS, Android, JVM, Browser/Node.js, etc. Currently, I only have JVM and JS targets. But adding more platforms should not be hard.
 
 ## Development Status
 
@@ -17,7 +19,7 @@ Pull requests welcome of course.
 ## Ideas for More Stuff
 
 - query DSL
-- convert responses to geojson (e.g. using my geogeometry library)
 - XML support
+- publish the jars somewhere; multiplatform is a PITA with jitpack
 
 Don't get your hopes up, I might not get around to doing any of this. But pull requests are welcome.

@@ -1,6 +1,8 @@
 package com.jillesvangurp.overpasskotlinclient
 
+import com.jillesvangurp.geojson.FeatureCollection
 import com.jillesvangurp.overpasskotlinclient.apiresponse.OverpassResponse
+import com.jillesvangurp.overpasskotlinclient.apiresponse.toFeatureCollection
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -32,6 +34,10 @@ class OverpassClient(
             accept(ContentType.Application.Json)
             body = data
         }
+    }
+
+    suspend fun getGeoJson(data: String): FeatureCollection {
+        return callAndParse(data).toFeatureCollection()
     }
 }
 
