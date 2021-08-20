@@ -1,0 +1,13 @@
+.classpath
+.project
+.settings
+*~
+target
+test-output
+.idea
+*iml
+.gradle
+build
+out
+.kotlintest
+localRepo
