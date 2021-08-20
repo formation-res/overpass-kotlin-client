@@ -20,6 +20,6 @@ Pull requests welcome of course.
 
 - query DSL
 - XML support
-- publish the jars somewhere; multiplatform is a PITA with jitpack
+- publish the jars somewhere; multi-platform is a PITA with jitpack
 
 Don't get your hopes up, I might not get around to doing any of this. But pull requests are welcome.
