@@ -6,7 +6,7 @@ Simple client for overpass that uses `ktor-client` and `kotlinx.serialization` f
 
 # Usage
 
-To use, add the client to your project (use [![](https://jitpack.io/v/jillesvangurp/overpass-kotlin-client.svg)](https://jitpack.io/#jillesvangurp/overpass-kotlin-client)) and then do something like:
+To use, add the client to your project (use [![](https://jitpack.io/v/jillesvangurp/overpass-kotlin-client.svg)](https://jitpack.io/#jillesvangurp/overpass-kotlin-client) and follow their instructions) and then do something like:
 
 ```kotlin
 // has some optional parameters for the endpoint and other things
