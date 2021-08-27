@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/jillesvangurp/overpass-kotlin-client.svg)](https://jitpack.io/#jillesvangurp/overpass-kotlin-client)[![Java CI with Gradle](https://github.com/jillesvangurp/overpass-kotlin-client/actions/workflows/gradle.yml/badge.svg)](https://github.com/jillesvangurp/overpass-kotlin-client/actions/workflows/gradle.yml)
+
 # Overpass Kotlin Client
 
 Simple client for overpass that uses `ktor-client` and `kotlinx.serialization` for parsing JSON responses.
