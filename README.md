@@ -20,8 +20,8 @@ Pull requests welcome of course.
 
 ## Ideas for More Stuff
 
-- query DSL
-- XML support
-- publish the jars somewhere; multi-platform is a PITA with jitpack
+- [ ] query DSL
+- [ ] XML support
+
 
 Don't get your hopes up, I might not get around to doing any of this. But pull requests are welcome.
