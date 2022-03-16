@@ -73,15 +73,18 @@ private fun writeGeoJson(
 
 private fun writeFormationCsv(result: FeatureCollection, amenity: String) {
     val osmPropertyKeys = result.features.flatMap { it.properties?.keys ?: emptySet() }.toSet()
-    val columns = listOf("name", "lat", "lon", "objectType", "attribution", "keyword") + osmPropertyKeys.map { "extra-$it" }
+    val columns = listOf("externalId","name", "lat", "lon", "objectType", "attribution", "keyword") + osmPropertyKeys.map { "extra-${it.replace(':','-')}" }
     val entries = result.features.map { feature ->
         val name: String = feature.properties?.get("name:ua")?.jsonPrimitive?.content
             ?: feature.properties?.get("name:ru")?.jsonPrimitive?.content
             ?: feature.properties?.get("name")?.jsonPrimitive?.content
             ?: amenity
         val centroid = feature.geometry?.centroid()!!
+        val id = feature.properties?.get("@id")?.jsonPrimitive?.content ?: centroid.toString() // fallback should not be needed but just in case
 
-        val cols = listOf(name,
+        val cols = listOf(
+            id,
+            name,
             centroid.latitude.toString(),
             centroid.longitude.toString(),
             "poi",
