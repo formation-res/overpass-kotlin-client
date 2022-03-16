@@ -1,24 +1,31 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.jillesvangurp.overpasskotlinclient
 
+import com.jillesvangurp.geojson.FeatureCollection
+import com.jillesvangurp.geojson.latitude
+import com.jillesvangurp.geojson.longitude
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
-import java.nio.file.Files
+import java.util.*
 
-val ukraineBL="45.178431819346656, 27.29264978684341"
-val ukraineTR="51.91283087517542, 38.82273252665817"
+val ukraineBL = "45.178431819346656, 27.29264978684341"
+val ukraineTR = "51.91283087517542, 38.82273252665817"
 
-val ukraineBbox="$ukraineBL,$ukraineTR"
+val ukraineBbox = "$ukraineBL,$ukraineTR"
 val koelnBbox = "50.91775326845564,6.9158935546875,50.95410145108779,6.979408264160155"
 
-val bbox= ukraineBbox
+val bbox = ukraineBbox
 
-val hospitalQuery="""
+fun amenityQuery(amenity: String) = """
     |[out:json];
     |(
-    |   node[amenity=hospital]
+    |   node[amenity=$amenity]
     |       ($bbox);
-    |   way[amenity=hospital]
+    |   way[amenity=$amenity]
     |       ($bbox);
     |);
     |out body;
@@ -26,7 +33,7 @@ val hospitalQuery="""
     |out body;
 """.trimMargin()
 
-val everythingQuery="""
+val everythingQuery = """
     |[out:json];
     |(
     |   relation
@@ -37,14 +44,67 @@ val everythingQuery="""
 
 
 suspend fun main() {
-    val client = OverpassClient()
+    // more here: https://wiki.openstreetmap.org/wiki/Overpass_API
+//    val endpoint = "https://z.overpass-api.de/api/interpreter"
+//    val endpoint="https://www.overpass-api.de/api/interpreter"
+    val endpoint ="https://overpass.kumi.systems/api/interpreter"
+
+    val client = OverpassClient(overpassEndpoint = endpoint)
     val jsonPretty = Json {
-        encodeDefaults=true
-        explicitNulls=false
-        prettyPrint=true
+        encodeDefaults = true
+        explicitNulls = false
+        prettyPrint = true
     }
-    val result = client.getGeoJson(hospitalQuery)
+    val amenity = "hospital"
+    val result = client.getGeoJson(amenityQuery(amenity))
+    writeGeoJson(jsonPretty, result)
+
+    writeFormationCsv(result, amenity)
+}
+
+private fun writeGeoJson(
+    jsonPretty: Json,
+    result: FeatureCollection,
+) {
     val json = jsonPretty.encodeToString(result)
     File("out.geojson").writeText(json)
     println(json)
+}
+
+private fun writeFormationCsv(result: FeatureCollection, amenity: String) {
+    val osmPropertyKeys = result.features.flatMap { it.properties?.keys ?: emptySet() }.toSet()
+    val columns = listOf("name", "lat", "lon", "objectType", "attribution", "keyword") + osmPropertyKeys.map { "extra-$it" }
+    val entries = result.features.map { feature ->
+        val name: String = feature.properties?.get("name:ua")?.jsonPrimitive?.content
+            ?: feature.properties?.get("name:ru")?.jsonPrimitive?.content
+            ?: feature.properties?.get("name")?.jsonPrimitive?.content
+            ?: amenity
+        val centroid = feature.geometry?.centroid()!!
+
+        val cols = listOf(name,
+            centroid.latitude.toString(),
+            centroid.longitude.toString(),
+            "poi",
+            "© contributors of OpenStreetMap",
+            "osm,${
+                amenity.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
+            }"
+        ) + osmPropertyKeys.map {
+            feature.properties?.get(it)?.jsonPrimitive?.content ?: ""
+        }
+        cols.joinToString("\t") {
+            it.replace('\t', ' ').replace('\n', ' ') // we export tsv, so no tabs/newlines in columns please
+        }
+    }
+    val buf = StringBuilder()
+    buf.append(columns.joinToString("\t"))
+    buf.append('\n')
+    entries.forEach {
+        buf.append(it)
+        buf.append('\n')
+    }
+    println(buf.toString())
+    File("out.tsv").writeText(buf.toString())
 }
