@@ -12,7 +12,7 @@ actual fun createHttpClient(): HttpClient {
             endpoint {
                 keepAliveTime = 100_000
                 connectTimeout = 5_000
-                requestTimeout = 30_000
+                requestTimeout = 120_000
                 connectAttempts = 3
             }
         }
