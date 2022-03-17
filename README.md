@@ -3,6 +3,7 @@
 # Overpass Kotlin Client
 
 Simple client for overpass that uses `ktor-client` and `kotlinx.serialization` for parsing JSON responses.
+We are using this at FORMATION to be able to run some simple queries against OpenStreetMap.
 
 # Usage
 
@@ -38,6 +39,8 @@ println(overpassResponse)
 val rawString = client.call(toiletsBboxKoelnCenter)
 println(rawString)
 ```
+
+Please be mindful of not running expensive queries needlessly when testing against the public overpass servers.
 
 ## Multi-Platform
 
