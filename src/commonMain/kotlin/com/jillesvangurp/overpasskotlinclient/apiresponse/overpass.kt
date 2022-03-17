@@ -102,11 +102,11 @@ fun OverpassResponse.toFeatureCollection(): FeatureCollection {
     val ways = this.elements.filter { it.type == "way" }.map { it as OsmElement.Way }.associateBy { it.id }
     val relations =
         this.elements.filter { it.type == "relation" }.map { it as OsmElement.Relation }.associateBy { it.id }
-    val referredNodes = (ways.map { (_, v) -> v as OsmElement.Way }.flatMap { it.nodes } +
-            relations.map { (_, r) -> r as OsmElement.Relation }.flatMap { it.members }.filter { it.type == "node" }
+    val referredNodes = (ways.map { (_, v) -> v }.flatMap { it.nodes } +
+            relations.map { (_, r) -> r }.flatMap { it.members }.filter { it.type == "node" }
                 .map { it.ref }).toSet()
     val referredWays =
-        relations.map { (_, v) -> v as OsmElement.Relation }.flatMap { it.members }.filter { it.type == "way" }
+        relations.map { (_, v) -> v }.flatMap { it.members }.filter { it.type == "way" }
             .map { it.ref }.toSet()
     val features = nodes
         .filter { !referredNodes.contains(it.key) }

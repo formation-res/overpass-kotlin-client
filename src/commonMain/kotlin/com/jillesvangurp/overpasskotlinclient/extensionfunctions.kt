@@ -11,8 +11,7 @@ fun LineStringCoordinates.centroid(): DoubleArray {
 
 fun PolygonCoordinates.centroid() = this[0].centroid()
 fun MultiPolygonCoordinates.centroid() = this.map { it.centroid() }.toTypedArray().centroid()
-fun Geometry.centroid(): PointCoordinates = centroidOrNull()
-    ?: throw IllegalStateException("missing centroid implementation for ${this::class.qualifiedName}")
+fun Geometry.centroid(): PointCoordinates = centroidOrNull() ?: error("missing centroid implementation for ${this::class.simpleName}")
 
 fun Geometry.centroidOrNull(): PointCoordinates? = when (this) {
     is Geometry.Point -> this.coordinates ?: GeoGeometry.polygonCenter(bbox!!)
