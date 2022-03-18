@@ -59,7 +59,7 @@ suspend fun main() {
     val result = client.getGeoJson(amenityQuery(amenity))
     writeGeoJson(jsonPretty, result)
 
-    writeFormationCsv(result, amenity)
+    writeFormationCsv(result, amenity, "Medical", "Red")
 }
 
 private fun writeGeoJson(
@@ -71,9 +71,9 @@ private fun writeGeoJson(
     println(json)
 }
 
-private fun writeFormationCsv(result: FeatureCollection, amenity: String) {
+private fun writeFormationCsv(result: FeatureCollection, amenity: String, icon: String, color: String) {
     val osmPropertyKeys = result.features.flatMap { it.properties?.keys ?: emptySet() }.toSet()
-    val columns = listOf("externalId","name", "lat", "lon", "objectType", "attribution", "keyword") + osmPropertyKeys.map { "extra-${it.replace(':','-')}" }
+    val columns = listOf("externalId","title", "lat", "lon", "objectType", "attribution", "keyword","iconcategory","color") + osmPropertyKeys.map { "extra-${it.replace(':','-')}" }
     val entries = result.features.map { feature ->
         val name: String = feature.properties?.get("name:ua")?.jsonPrimitive?.content
             ?: feature.properties?.get("name:ru")?.jsonPrimitive?.content
@@ -93,7 +93,9 @@ private fun writeFormationCsv(result: FeatureCollection, amenity: String) {
                 amenity.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                 }
-            }"
+            }",
+            icon,
+            color,
         ) + osmPropertyKeys.map {
             feature.properties?.get(it)?.jsonPrimitive?.content ?: ""
         }
