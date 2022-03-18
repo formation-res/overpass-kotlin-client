@@ -72,6 +72,8 @@ private fun writeGeoJson(
 }
 
 private fun writeFormationCsv(result: FeatureCollection, amenity: String, icon: String, color: String) {
+    // this tab separated values format can be imported with FORMATION. Might be useful for others. Otherwise, use the geojson.
+
     val osmPropertyKeys = result.features.flatMap { it.properties?.keys ?: emptySet() }.toSet()
     val columns = listOf("externalId","title", "lat", "lon", "objectType", "attribution", "keyword","iconcategory","color") + osmPropertyKeys.map { "extra-${it.replace(':','-')}" }
     val entries = result.features.map { feature ->
