@@ -2,7 +2,7 @@
 
 # Overpass Kotlin Client
 
-Simple client for overpass that uses `ktor-client` and `kotlinx.serialization` for parsing JSON responses.
+A simple client for overpass that uses `ktor-client` and `kotlinx.serialization` for parsing JSON responses.
 We are using this at FORMATION to be able to run some simple queries against OpenStreetMap.
 
 # Usage
@@ -56,10 +56,10 @@ Limitations:
 
 - Relations are not fully supported for geojson yet (TODO)
 
-## Ideas for More Stuff
+# About FORMATION Gmbh
 
-- [ ] query DSL
-- [ ] XML support
-- [ ] Handle relations for geojson conversion
+[FORMATION](https://tryformation.com) is a Berlin based company that is empowering workforces around the world with maps.
 
-Don't get your hopes up, I might not get around to doing any of this. **But pull requests are welcome**.
+
+
+
