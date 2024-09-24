@@ -11,3 +11,6 @@ build
 out
 .kotlintest
 localRepo
+.kotlin
+out.geojson
+out.tsv

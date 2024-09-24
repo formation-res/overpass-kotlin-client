@@ -5,14 +5,16 @@ import com.jillesvangurp.overpasskotlinclient.apiresponse.OverpassResponse
 import com.jillesvangurp.overpasskotlinclient.apiresponse.toFeatureCollection
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.DefaultJson
 import mu.KLogger
 import mu.KotlinLogging
 
 private val logger: KLogger = KotlinLogging.logger {  }
 
 class OverpassClient(
-    private val httpClient: HttpClient = createHttpClient(),
+    private val httpClient: HttpClient,
     private val overpassEndpoint: String = "https://www.overpass-api.de/api/interpreter") {
 
     suspend fun call(data: String): String {
@@ -21,8 +23,8 @@ class OverpassClient(
         val url = "$overpassEndpoint?$queryString"
         logger.debug { "calling overpass: $url" }
         return httpClient.post(url) {
-            body = data
-        }
+            setBody(data)
+        }.bodyAsText()
     }
 
     suspend fun callAndParse(data: String): OverpassResponse {
@@ -32,7 +34,10 @@ class OverpassClient(
         logger.debug { "calling overpass: $url" }
         return httpClient.post(url) {
             accept(ContentType.Application.Json)
-            body = data
+            setBody(data)
+        }.let {
+            val b = it.bodyAsText()
+            DefaultJson.decodeFromString(b)
         }
     }
 
@@ -40,5 +45,3 @@ class OverpassClient(
         return callAndParse(data).toFeatureCollection()
     }
 }
-
-expect fun createHttpClient(): HttpClient

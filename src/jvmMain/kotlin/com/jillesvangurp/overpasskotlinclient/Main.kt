@@ -5,6 +5,7 @@ package com.jillesvangurp.overpasskotlinclient
 import com.jillesvangurp.geojson.FeatureCollection
 import com.jillesvangurp.geojson.latitude
 import com.jillesvangurp.geojson.longitude
+import io.ktor.client.HttpClient
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -49,7 +50,10 @@ suspend fun main() {
 //    val endpoint="https://www.overpass-api.de/api/interpreter"
     val endpoint ="https://overpass.kumi.systems/api/interpreter"
 
-    val client = OverpassClient(overpassEndpoint = endpoint)
+    val client = OverpassClient(
+        httpClient = HttpClient(),
+        overpassEndpoint = endpoint
+    )
     val jsonPretty = Json {
         encodeDefaults = true
         explicitNulls = false
