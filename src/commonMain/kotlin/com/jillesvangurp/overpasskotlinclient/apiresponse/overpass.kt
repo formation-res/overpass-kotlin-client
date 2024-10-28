@@ -3,11 +3,11 @@ package com.jillesvangurp.overpasskotlinclient.apiresponse
 import com.jillesvangurp.geojson.FeatureCollection
 import com.jillesvangurp.geojson.Geometry
 import com.jillesvangurp.geojson.asFeature
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger { }
 

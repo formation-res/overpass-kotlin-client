@@ -3,15 +3,14 @@ package com.jillesvangurp.overpasskotlinclient
 import com.jillesvangurp.geojson.FeatureCollection
 import com.jillesvangurp.overpasskotlinclient.apiresponse.OverpassResponse
 import com.jillesvangurp.overpasskotlinclient.apiresponse.toFeatureCollection
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.DefaultJson
-import mu.KLogger
-import mu.KotlinLogging
 
-private val logger: KLogger = KotlinLogging.logger {  }
+private val logger = KotlinLogging.logger {  }
 
 class OverpassClient(
     private val httpClient: HttpClient,

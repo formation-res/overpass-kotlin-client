@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.net.URI
+
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -49,20 +49,20 @@ kotlin {
     macosArm64()
     iosArm64()
     iosX64()
-    // blocked on ktor-client wasm support
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        browser()
-//        nodejs()
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        nodejs()
+        // errors for some reason
 //        d8()
-//    }
+    }
 
     sourceSets {
 
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("io.github.microutils:kotlin-logging:_")
+                implementation("io.github.oshai:kotlin-logging:_")
                 implementation("io.ktor:ktor-client-logging:_")
                 implementation("io.ktor:ktor-serialization-kotlinx:_")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:_")
@@ -114,12 +114,12 @@ kotlin {
             }
         }
 
-//        wasmJsTest {
-//            dependencies {
-//                implementation(kotlin("test-wasm-js"))
-//                implementation("io.ktor:ktor-client-wasm:_")
-//            }
-//        }
+        wasmJsTest {
+            dependencies {
+                implementation(kotlin("test-wasm-js"))
+                implementation("io.ktor:ktor-client-js-wasm-js:_")
+            }
+        }
 
         all {
             languageSettings.optIn("kotlin.RequiresOptIn")
